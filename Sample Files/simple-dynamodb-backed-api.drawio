@@ -1,0 +1,31 @@
+<mxfile compressed="false" host="Chrome" modified="2020-07-31T23:57:53.396Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36" version="13.5.6" etag="8V2vy5y89pgUsP6vZ4ov" type="device">
+  <diagram id="Z1Xa-DlZrkIQAO8oeQJy" name="Page-1">
+    <mxGraphModel dx="1038" dy="631" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="y5HxkgjPUPNUoISsHOnR-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="y5HxkgjPUPNUoISsHOnR-1" target="y5HxkgjPUPNUoISsHOnR-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="y5HxkgjPUPNUoISsHOnR-1" value="GetData" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#D05C17;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.lambda_function;" vertex="1" parent="1">
+          <mxGeometry x="362" y="120" width="78" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="y5HxkgjPUPNUoISsHOnR-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="y5HxkgjPUPNUoISsHOnR-3" target="y5HxkgjPUPNUoISsHOnR-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="y5HxkgjPUPNUoISsHOnR-3" value="" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#232F3E;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.client;" vertex="1" parent="1">
+          <mxGeometry x="40" y="120" width="80.06" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="y5HxkgjPUPNUoISsHOnR-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="y5HxkgjPUPNUoISsHOnR-4" target="y5HxkgjPUPNUoISsHOnR-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="y5HxkgjPUPNUoISsHOnR-4" value="GET /abc" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#5A30B5;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.endpoint;" vertex="1" parent="1">
+          <mxGeometry x="200" y="120" width="78" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="y5HxkgjPUPNUoISsHOnR-5" value="DataStore" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#3334B9;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.table;" vertex="1" parent="1">
+          <mxGeometry x="520" y="120" width="78" height="78" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

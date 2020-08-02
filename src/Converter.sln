@@ -9,6 +9,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Converter.Model", "Converte
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Converter.Model.Tests", "Converter.Model.Tests\Converter.Model.Tests.csproj", "{95E60205-3175-43C7-916C-131D04EE7665}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Converter.DiagramFileReading", "Converter.DiagramFileReading\Converter.DiagramFileReading.csproj", "{8F4202B3-93CF-41BA-8D1D-6501DE23957F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Converter.SamWriting", "Converter.SamWriting\Converter.SamWriting.csproj", "{8A30B4F5-ADF1-443A-9000-30F9AFAEF70B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{95E60205-3175-43C7-916C-131D04EE7665}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95E60205-3175-43C7-916C-131D04EE7665}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95E60205-3175-43C7-916C-131D04EE7665}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F4202B3-93CF-41BA-8D1D-6501DE23957F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F4202B3-93CF-41BA-8D1D-6501DE23957F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F4202B3-93CF-41BA-8D1D-6501DE23957F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F4202B3-93CF-41BA-8D1D-6501DE23957F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A30B4F5-ADF1-443A-9000-30F9AFAEF70B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A30B4F5-ADF1-443A-9000-30F9AFAEF70B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A30B4F5-ADF1-443A-9000-30F9AFAEF70B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A30B4F5-ADF1-443A-9000-30F9AFAEF70B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

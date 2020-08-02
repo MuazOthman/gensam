@@ -28,12 +28,12 @@ namespace Converter.Model.Tests
         {
             get
             {
-                var validMethods = new[] {"GET", "POST", "PUT", "DELETE", "PATCH"};
-                var validEndpoints = new[] {"/", "/a", "/{a}", "/a/b/c", "/a/{b}", "/a/{b}/{c}"};
+                var validMethods = new[] { "GET", "POST", "PUT", "DELETE", "PATCH" };
+                var validEndpoints = new[] { "/", "/a", "/{a}", "/a/b/c", "/a/{b}", "/a/{b}/{c}" };
                 var result = new List<object[]>();
                 foreach (var method in validMethods)
-                foreach (var endpoint in validEndpoints)
-                    result.Add(new object[] {method, endpoint});
+                    foreach (var endpoint in validEndpoints)
+                        result.Add(new object[] { method, endpoint });
                 return result;
             }
         }
@@ -70,18 +70,26 @@ namespace Converter.Model.Tests
             Assert.Equal("default", actualRuntime);
         }
 
-        //[Theory]
-        //[InlineData("GET abc")]
-        //public void ComponentCtor_ForFunction_WithValidRuntime_Should()
-        //{
-        //    // Arrange
+        [Theory]
+        [InlineData("dotnetcore2.1")]
+        [InlineData("dotnetcore3.1")]
+        [InlineData("nodejs12.x")]
+        public void ComponentCtor_ForFunction_WithValidRuntime_ShouldSucceed(string runtime)
+        {
+            // Arrange
 
-        //    // Act
-        //    var function = new Component("functionName", ComponentType.Function);
+            // Act
+            var function = new Component(
+                "functionName",
+                ComponentType.Function,
+                new Dictionary<string, string> {
+                    { "Runtime", runtime }
+                }
+            );
 
-        //    // Assert
-        //    var actualRuntime = Assert.Contains("Runtime", function.Properties);
-        //    Assert.Equal("default", actualRuntime);
-        //}
+            // Assert
+            var actualRuntime = Assert.Contains("Runtime", function.Properties);
+            Assert.Equal(runtime, actualRuntime);
+        }
     }
 }

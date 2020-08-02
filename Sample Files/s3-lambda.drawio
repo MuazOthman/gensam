@@ -1,0 +1,21 @@
+<mxfile host="Electron" modified="2020-08-02T04:46:02.765Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/13.5.7 Chrome/83.0.4103.122 Electron/9.1.2 Safari/537.36" etag="t559aIOiGaXbi-67rH79" compressed="false" version="13.5.7" type="device">
+  <diagram id="OpHD7ZU4Du-DE1_dykOj" name="Page-1">
+    <mxGraphModel dx="1024" dy="592" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="xPQL5d698VenN8XlZXTE-1" value="BackgroundProcess" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#D05C17;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.lambda_function;" parent="1" vertex="1">
+          <mxGeometry x="200" y="80" width="78" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="xPQL5d698VenN8XlZXTE-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="UzHoOqmOOV8NZHs84mFL-1" target="xPQL5d698VenN8XlZXTE-1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="117.91006917755578" y="119" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="UzHoOqmOOV8NZHs84mFL-1" value="MyBucket" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#277116;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.bucket;" parent="1" vertex="1">
+          <mxGeometry x="40" y="80" width="75" height="78" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

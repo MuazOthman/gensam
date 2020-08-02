@@ -1,0 +1,104 @@
+﻿AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: SAM template genrated by gensam
+
+Globals:
+  Function:
+    Runtime: dotnetcore2.1
+    Timeout: 20
+    MemorySize: 128
+    Environment:
+      Variables:
+        UNWRAP_AGGREGATE_EXCEPTIONS: true
+
+Parameters:
+{% if model.IsCorsEnabled -%}
+  AllowedDomains:
+    Type: String
+    Default: '*'
+    Description: The allowed domains to access the REST API over CORS
+
+{% endif -%}
+
+Resources:
+{% if model.Functions.size > 0 -%}
+### Functions ###
+
+{% for t in model.Functions -%}
+  {{t.Name}}:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./Lamb{{t.Name}}/
+      Handler: Lamb{{t.Name}}::Lamb{{t.Name}}.{{t.Name}}::Invoke
+{% if t.EnvironmentVariables.size > 0 -%}
+      Environment:
+        Variables:
+{% for env in t.EnvironmentVariables -%}
+          {{env.Key}}: {{env.Value}}
+{% endfor -%}
+{% endif -%}
+{% if t.Policies.size > 0 -%}
+      Policies:
+{% for p in t.Policies -%}
+        - {{p.Key}}:
+            {{p.Value}}
+{% endfor -%}
+{% endif -%}
+{% if t.Events.size > 0 -%}
+      Events:
+{% for e in t.Events -%}
+        {{e.Name}}:
+          Type: {{e.Type}}
+{% endfor -%}
+{% endif -%}
+{% if e.Properties.size > 0 -%}
+          Properties:
+{% for p in e.Properties -%}
+            {{p.Key}}: {{p.Value}}
+{% endfor -%}
+{% endif -%}
+
+{% endfor -%}
+{% endif -%}
+{% if model.Tables.size > 0 -%}
+### Tables ###
+
+{% for t in model.Tables -%}
+  {{t.Name}}:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: 'PK'
+          AttributeType: 'S'
+        - AttributeName: 'SK'
+          AttributeType: 'S'
+      KeySchema:
+        - AttributeName: 'PK'
+          KeyType: 'HASH'
+        - AttributeName: 'SK'
+          KeyType: 'RANGE'
+      BillingMode: PAY_PER_REQUEST
+{% if t.IsStreamEnabled -%}
+      StreamSpecification:
+        StreamViewType: NEW_IMAGE
+{% endif -%}
+      SSESpecification:
+        SSEEnabled: true
+
+{% endfor -%}
+{% endif -%}
+{% if model.Topics.size > 0 -%}
+### SNS Topics ###
+
+{% for t in model.Topics -%}
+  {{t}}:
+    Type: AWS::SNS::Topic
+
+{% endfor -%}
+{% endif -%}
+{% if model.HasRestApi -%}
+Outputs:
+  ApiEndpoint:
+    Description: 'API endpoint'
+    Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/'
+{% endif -%}

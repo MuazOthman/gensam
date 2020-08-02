@@ -1,0 +1,33 @@
+<mxfile host="Electron" modified="2020-08-02T04:46:17.867Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/13.5.7 Chrome/83.0.4103.122 Electron/9.1.2 Safari/537.36" etag="C1Ejdnq2X0FZT4S0Dfbs" compressed="false" version="13.5.7" type="device">
+  <diagram id="OpHD7ZU4Du-DE1_dykOj" name="Page-1">
+    <mxGraphModel dx="1024" dy="592" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="S_gHruhMBMT_58RVapEN-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="xPQL5d698VenN8XlZXTE-1" target="S_gHruhMBMT_58RVapEN-1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="xPQL5d698VenN8XlZXTE-1" value="Function1" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#D05C17;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.lambda_function;" parent="1" vertex="1">
+          <mxGeometry x="80" y="80" width="78" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="S_gHruhMBMT_58RVapEN-4" value="Attribute1 = Value1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="S_gHruhMBMT_58RVapEN-1" target="S_gHruhMBMT_58RVapEN-2" edge="1">
+          <mxGeometry x="0.0176" y="19" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="S_gHruhMBMT_58RVapEN-1" value="TopicA" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#BC1356;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.topic;" parent="1" vertex="1">
+          <mxGeometry x="240" y="85.5" width="78" height="67" as="geometry" />
+        </mxCell>
+        <mxCell id="S_gHruhMBMT_58RVapEN-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="S_gHruhMBMT_58RVapEN-2" target="S_gHruhMBMT_58RVapEN-5" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="S_gHruhMBMT_58RVapEN-2" value="QueueA" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#BC1356;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.queue;" parent="1" vertex="1">
+          <mxGeometry x="440" y="95.5" width="78" height="47" as="geometry" />
+        </mxCell>
+        <mxCell id="S_gHruhMBMT_58RVapEN-5" value="Function2" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#D05C17;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.lambda_function;" parent="1" vertex="1">
+          <mxGeometry x="600" y="80" width="78" height="78" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

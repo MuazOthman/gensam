@@ -66,6 +66,11 @@ namespace Converter.Model
             if (_componentTypeHandlers.ContainsKey(type)) _properties = _componentTypeHandlers[type](Name, _properties);
         }
 
+        public override string ToString()
+        {
+            return $"{Name}:{Type}";
+        }
+
         public IReadOnlyDictionary<string, string> Properties => _properties;
 
         public string Name { get; }

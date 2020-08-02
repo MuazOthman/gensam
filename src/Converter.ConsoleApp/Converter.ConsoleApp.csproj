@@ -10,7 +10,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Converter.DiagramFileReading\Converter.DiagramFileReading.csproj" />
     <ProjectReference Include="..\Converter.Model\Converter.Model.csproj" />
+    <ProjectReference Include="..\Converter.SamWriting\Converter.SamWriting.csproj" />
   </ItemGroup>
 
 </Project>
