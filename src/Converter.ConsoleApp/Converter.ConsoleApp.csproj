@@ -6,8 +6,26 @@
 
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>gensam</ToolCommandName>
+    <Title>gensam</Title>
+    <PackageId>gensam</PackageId>
+    <Authors>MuazOthman</Authors>
+    <Summary>
+      Generate AWS SAM template from draw.io (diagrams.net) diagrams using the AWS19 icons.
+    </Summary>
+    <PackageDescription>
+      gensam is a command line tool to help build serverless apps on AWS by generating AWS SAM template from draw.io (diagrams.net) diagrams using the AWS19 icons.
+    </PackageDescription>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <AssemblyTitle>gensam</AssemblyTitle>
+    <Copyright>Copyright (c) 2020 Muaz Othman</Copyright>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <Version>v0.1.0.0</Version>
     <PackageOutputPath>./nupkg</PackageOutputPath>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.8.0" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Converter.DiagramFileReading\Converter.DiagramFileReading.csproj" />

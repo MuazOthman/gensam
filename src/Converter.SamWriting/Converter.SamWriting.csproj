@@ -6,9 +6,11 @@
 
   <ItemGroup>
     <None Remove="template.liquid" />
+    <None Remove="_yaml.liquid" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="_yaml.liquid" />
     <EmbeddedResource Include="template.liquid" />
   </ItemGroup>
 

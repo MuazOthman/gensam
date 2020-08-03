@@ -6,6 +6,8 @@ namespace Converter.SamWriting
     public class FunctionModel : Drop
     {
         public string Name { get; set; }
+        public string CodeUri { get; set; }
+        public string Handler { get; set; }
         public Dictionary<string, string> EnvironmentVariables { get; } = new Dictionary<string, string>();
         public Dictionary<string, string> Policies { get; } = new Dictionary<string, string>();
         public List<FunctionEventsModel> Events { get; } = new List<FunctionEventsModel>();

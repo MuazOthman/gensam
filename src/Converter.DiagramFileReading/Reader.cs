@@ -41,9 +41,23 @@ namespace Converter.DiagramFileReading
                     application.RegisterComponent(el.Attribute("id").Value, c);
                 }
             }
-            foreach (XElement el in edges)
+            foreach (XElement edge in edges)
             {
-                application.RegisterConnection(el.Attribute("source").Value, el.Attribute("target").Value);
+                var labelElement = 
+                (from el in root.Elements("mxCell")
+                 where
+                    (string)el.Attribute("vertex") == "1"
+                    && (string)el.Attribute("parent") == (string)edge.Attribute("id") 
+                    && ((string)el.Attribute("style")).Contains("edgeLabel")
+                 select el).SingleOrDefault();
+                var label = "";
+                if (labelElement != null)
+                {
+                    var html = new HtmlDocument();
+                    html.LoadHtml(labelElement.Attribute("value").Value);
+                    label = html.DocumentNode.InnerText;
+                }
+                application.RegisterConnection(edge.Attribute("source").Value, edge.Attribute("target").Value, label);
             }
         }
 
@@ -65,6 +79,8 @@ namespace Converter.DiagramFileReading
                 return new Component(html.DocumentNode.InnerText, ComponentType.Topic);
             if (element.Attribute("style").Value.Contains("shape=mxgraph.aws4.queue"))
                 return new Component(html.DocumentNode.InnerText, ComponentType.Queue);
+            if (element.Attribute("style").Value.Contains("shape=mxgraph.aws4.bucket"))
+                return new Component(html.DocumentNode.InnerText, ComponentType.Bucket);
             return null;
         }
     }

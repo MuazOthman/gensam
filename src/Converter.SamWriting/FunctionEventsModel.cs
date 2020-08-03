@@ -1,5 +1,4 @@
 ﻿using DotLiquid;
-using System.Collections.Generic;
 
 namespace Converter.SamWriting
 {
@@ -7,6 +6,6 @@ namespace Converter.SamWriting
     {
         public string Name { get; set; }
         public string Type { get; set; }
-        public Dictionary<string, string> Properties { get; set; } = new Dictionary<string, string>();
+        public YamlValue Properties { get; set; }
     }
 }

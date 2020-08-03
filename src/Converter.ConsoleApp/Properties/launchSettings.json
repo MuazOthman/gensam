@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Converter.ConsoleApp": {
+      "commandName": "Project",
+      "commandLineArgs": "--input \"..\\..\\..\\..\\..\\Sample Files\\web-app1.drawio\""
+    }
+  }
+}

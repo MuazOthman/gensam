@@ -24,37 +24,35 @@ Resources:
 {% if model.Functions.size > 0 -%}
 ### Functions ###
 
-{% for t in model.Functions -%}
-  {{t.Name}}:
+{% for f in model.Functions -%}
+  {{f.Name}}:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./Lamb{{t.Name}}/
-      Handler: Lamb{{t.Name}}::Lamb{{t.Name}}.{{t.Name}}::Invoke
-{% if t.EnvironmentVariables.size > 0 -%}
+      CodeUri: {{f.CodeUri}}
+      Handler: {{f.Handler}}
+{% if f.EnvironmentVariables.size > 0 -%}
       Environment:
         Variables:
-{% for env in t.EnvironmentVariables -%}
+{% for env in f.EnvironmentVariables -%}
           {{env.Key}}: {{env.Value}}
 {% endfor -%}
 {% endif -%}
-{% if t.Policies.size > 0 -%}
+{% if f.Policies.size > 0 -%}
       Policies:
-{% for p in t.Policies -%}
+{% for p in f.Policies -%}
         - {{p.Key}}:
             {{p.Value}}
 {% endfor -%}
 {% endif -%}
-{% if t.Events.size > 0 -%}
+{% if f.Events.size > 0 -%}
       Events:
-{% for e in t.Events -%}
+{% for e in f.Events -%}
         {{e.Name}}:
           Type: {{e.Type}}
-{% endfor -%}
-{% endif -%}
-{% if e.Properties.size > 0 -%}
+{% if e.Properties != null -%}
           Properties:
-{% for p in e.Properties -%}
-            {{p.Key}}: {{p.Value}}
+{% include 'yaml' with e.Properties prefix: '            ' -%}
+{% endif -%}
 {% endfor -%}
 {% endif -%}
 
@@ -87,12 +85,86 @@ Resources:
 
 {% endfor -%}
 {% endif -%}
+{% if model.Buckets.size > 0 -%}
+### S3 Buckets ###
+
+{% for b in model.Buckets -%}
+  {{b.Name}}:
+    Type: AWS::S3::Bucket
+{% if b.IsCorsEnabled -%}
+    Properties:
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders:
+              - "*"
+            AllowedMethods:
+              - PUT
+            AllowedOrigins:
+              - !Sub "${AllowedDomains}"
+{% endif -%}
+
+{% endfor -%}
+{% endif -%}
 {% if model.Topics.size > 0 -%}
 ### SNS Topics ###
 
 {% for t in model.Topics -%}
   {{t}}:
     Type: AWS::SNS::Topic
+
+{% endfor -%}
+{% endif -%}
+{% if model.Queues.size > 0 -%}
+### SQS Queues ###
+
+{% for q in model.Queues -%}
+  {{q}}:
+    Type: AWS::SQS::Queue
+    Properties:
+      VisibilityTimeout: 60
+
+{% endfor -%}
+{% endif -%}
+{% if model.QueuePoliciesPerTopic.size > 0 -%}
+### SQS Queue Policies per SNS Topic ###
+
+{% for policy in model.QueuePoliciesPerTopic -%}
+  QueuePolicyFor{{policy.Key}}:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: '*'
+            Action:
+              - 'sqs:SendMessage'
+            Resource:
+{% for q in policy.Value -%}
+              - !GetAtt {{q}}.Arn
+{% endfor -%}
+            Condition:
+              ArnEquals:
+                aws:SourceArn: !Ref {{policy.Key}}
+      Queues:
+{% for q in policy.Value -%}
+        - !Ref {{q}}
+{% endfor -%}
+
+{% endfor -%}
+{% endif -%}
+{% if model.QueueTopicSubscriptions.size > 0 -%}
+### SQS Queue Subscription to SNS ###
+
+{% for sub in model.QueueTopicSubscriptions -%}
+  {{sub.Queue}}{{sub.Topic}}:
+    Type: AWS::SNS::Subscription
+    Properties:
+      TopicArn: !Ref {{sub.Topic}}
+      Endpoint: !GetAtt {{sub.Queue}}.Arn
+      Protocol: sqs
+      FilterPolicy:
+{% include 'yaml' with sub.FilterPolicy -%}
 
 {% endfor -%}
 {% endif -%}

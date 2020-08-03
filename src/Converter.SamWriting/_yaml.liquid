@@ -1,0 +1,16 @@
+﻿{% if yaml.Type == "String"-%}
+{{yaml.Prefix}}{{yaml.StringValue}}
+{% elseif yaml.Type == "List" -%}
+{% for item in yaml.ListValue -%}
+{% include 'yaml' with item -%}
+{% endfor -%}
+{% elseif yaml.Type == "Map" -%}
+{% for item in yaml.MapValue -%}
+{% if item.Value.Type == "String"-%}
+{{yaml.Prefix}}{{item.Key}}: {{item.Value.StringValue}}
+{% else -%}
+{{yaml.Prefix}}{{item.Key}}:
+{% include 'yaml' with item.Value -%}
+{% endif -%}
+{% endfor -%}
+{% endif -%}
