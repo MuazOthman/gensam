@@ -5,6 +5,8 @@ namespace Converter.SamWriting
 {
     public class TemplateModel : Drop
     {
+        public List<string> IncludedFiles { get; internal set; }
+        public FunctionGlobals FunctionGlobals { get; internal set; }
         public bool IsCorsEnabled { get; internal set; }
         public bool HasRestApi { get; internal set; }
         public List<TableModel> Tables { get; internal set; }
@@ -14,12 +16,5 @@ namespace Converter.SamWriting
         public List<BucketModel> Buckets { get; internal set; }
         public List<FunctionModel> Functions { get; internal set; }
         public List<QueueTopicSubscription> QueueTopicSubscriptions { get; internal set; }
-    }
-
-    public class QueueTopicSubscription : Drop
-    {
-        public string Topic { get; set; }
-        public string Queue { get; set; }
-        public YamlValue FilterPolicy { get; set; }
     }
 }

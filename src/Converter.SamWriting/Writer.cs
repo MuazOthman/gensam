@@ -1,6 +1,7 @@
 ﻿using Converter.Model;
 using DotLiquid;
 using DotLiquid.FileSystems;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,7 +12,8 @@ namespace Converter.SamWriting
     public class Writer
     {
         private readonly Application application;
-        public TemplateOptions TemplateOptions { get; set; } = new TemplateOptions();
+        public WriterSettings WriterSettings { get; set; }
+        public List<string> IncludedFiles { get; set; }
 
         private readonly TemplateModel templateModel;
 
@@ -27,8 +29,14 @@ namespace Converter.SamWriting
         public void Write(string filePath)
         {
             Template.NamingConvention = new DotLiquid.NamingConventions.CSharpNamingConvention();
-            Template.FileSystem = new EmbeddedFileSystem(GetType().Assembly, "Converter.SamWriting");
-            Template t = Template.Parse(GetTemplate());
+            var fs = new TemplateFileSystem();
+            fs["FunctionCodeUri"] = WriterSettings?.Function?.CodeUriTemplate;
+            fs["FunctionHandler"] = WriterSettings?.Function?.HandlerTemplate;
+            Template.FileSystem = fs;
+            Template t = Template.Parse(fs.ReadTemplateFile("template"));
+
+            templateModel.FunctionGlobals = WriterSettings?.Function?.Globals;
+            templateModel.IncludedFiles = IncludedFiles;
 
             foreach (var f in templateModel.Functions)
             {
@@ -37,6 +45,8 @@ namespace Converter.SamWriting
                     if (e.Properties != null)
                         e.Properties.Prefix = "            ";
                 }
+                if (f.Policies != null)
+                    f.Policies.Prefix = "            ";
             }
 
             foreach (var sub in templateModel.QueueTopicSubscriptions)
@@ -53,9 +63,11 @@ namespace Converter.SamWriting
         {
             templateModel.HasRestApi = application.Components
                 .Any(c => c.Type == ComponentType.RestEndpoint);
+
             templateModel.IsCorsEnabled = application.Components
                 .Where(c => c.Type == ComponentType.RestEndpoint)
                 .Any(c => c.InboundConnections.Any());
+
             templateModel.Tables = application.Components
                 .Where(c => c.Type == ComponentType.Table)
                 .Select(c => new TableModel
@@ -64,14 +76,17 @@ namespace Converter.SamWriting
                     IsStreamEnabled = c.OutboundConnections.Any()
                 })
                 .ToList();
+
             templateModel.Functions = application.Components
                 .Where(c => c.Type == ComponentType.Function)
                 .Select(c => BuildFunction(c))
                 .ToList();
+
             templateModel.Topics = application.Components
                 .Where(c => c.Type == ComponentType.Topic)
                 .Select(c => c.Name)
                 .ToList();
+
             templateModel.QueuePoliciesPerTopic = application.Components
                 .Where(c => c.Type == ComponentType.Topic)
                 .SelectMany(c => c.OutboundConnections.Where(conn => conn.Target.Type == ComponentType.Queue))
@@ -94,6 +109,7 @@ namespace Converter.SamWriting
                 .Where(c => c.Type == ComponentType.Queue)
                 .Select(c => c.Name)
                 .ToList();
+
             templateModel.Buckets = application.Components
                 .Where(c => c.Type == ComponentType.Bucket)
                 .Select(c => new BucketModel
@@ -108,9 +124,7 @@ namespace Converter.SamWriting
         {
             var result = new FunctionModel
             {
-                Name = component.Name,
-                CodeUri = TemplateOptions.GetFunctionCodeUri(component.Name),
-                Handler = TemplateOptions.GetFunctionHandler(component.Name),
+                Name = component.Name
             };
             foreach (var conn in component.OutboundConnections)
             {
@@ -120,19 +134,34 @@ namespace Converter.SamWriting
                         // not supported
                         break;
                     case ComponentType.Bucket:
-                        result.EnvironmentVariables.Add($"{conn.Target.Name}BucketName", $"!Ref {conn.Target.Name}");
-                        result.Policies.Add("S3CrudPolicy", $"BucketName: !Ref {conn.Target.Name}");
+                        if (!result.EnvironmentVariables.ContainsKey($"{conn.Target.Name}BucketName"))
+                            result.EnvironmentVariables.Add($"{conn.Target.Name}BucketName", $"!Ref {conn.Target.Name}");
+                        result.Policies.Add(
+                            new Dictionary<string, string> {
+                                { "S3CrudPolicy", $"BucketName: !Ref {conn.Target.Name}" }
+                            }
+                        );
                         break;
                     case ComponentType.EventBus:
-                        result.EnvironmentVariables.Add($"{conn.Target.Name}BusName", $"!Ref {conn.Target.Name}");
-                        result.Policies.Add("EventBridgePutEventsPolicy", $"EventBusName: !Ref {conn.Target.Name}");
+                        if (!result.EnvironmentVariables.ContainsKey($"{conn.Target.Name}BusName"))
+                            result.EnvironmentVariables.Add($"{conn.Target.Name}BusName", $"!Ref {conn.Target.Name}");
+                        result.Policies.Add(
+                            new Dictionary<string, string> {
+                                { "EventBridgePutEventsPolicy", $"EventBusName: !Ref {conn.Target.Name}" }
+                            }
+                        );
                         break;
                     case ComponentType.Function:
                         // not supported
                         break;
                     case ComponentType.Queue:
-                        result.EnvironmentVariables.Add($"{conn.Target.Name}QueueUrl", $"!Ref {conn.Target.Name}");
-                        result.Policies.Add("SQSSendMessagePolicy", $"QueueName: !GetAtt {conn.Target.Name}.QueueName");
+                        if (!result.EnvironmentVariables.ContainsKey($"{conn.Target.Name}QueueUrl"))
+                            result.EnvironmentVariables.Add($"{conn.Target.Name}QueueUrl", $"!Ref {conn.Target.Name}");
+                        result.Policies.Add(
+                            new Dictionary<string, string> {
+                                { "SQSSendMessagePolicy", $"QueueName: !GetAtt {conn.Target.Name}.QueueName" }
+                            }
+                        );
                         break;
                     case ComponentType.RestEndpoint:
                         // not supported
@@ -141,12 +170,22 @@ namespace Converter.SamWriting
                         // not supported
                         break;
                     case ComponentType.Table:
-                        result.EnvironmentVariables.Add($"{conn.Target.Name}TableName", $"!Ref {conn.Target.Name}");
-                        result.Policies.Add("DynamoDBCrudPolicy", $"TableName: !Ref {conn.Target.Name}");
+                        if (!result.EnvironmentVariables.ContainsKey($"{conn.Target.Name}TableName"))
+                            result.EnvironmentVariables.Add($"{conn.Target.Name}TableName", $"!Ref {conn.Target.Name}");
+                        result.Policies.Add(
+                            new Dictionary<string, string> {
+                                { "DynamoDBCrudPolicy", $"TableName: !Ref {conn.Target.Name}" }
+                            }
+                        );
                         break;
                     case ComponentType.Topic:
-                        result.EnvironmentVariables.Add($"{conn.Target.Name}TopicArn", $"!Ref {conn.Target.Name}");
-                        result.Policies.Add("SNSPublishMessagePolicy", $"TopicName: !GetAtt {conn.Target.Name}.TopicName");
+                        if (!result.EnvironmentVariables.ContainsKey($"{conn.Target.Name}TopicArn"))
+                            result.EnvironmentVariables.Add($"{conn.Target.Name}TopicArn", $"!Ref {conn.Target.Name}");
+                        result.Policies.Add(
+                            new Dictionary<string, string> {
+                                { "SNSPublishMessagePolicy", $"TopicName: !GetAtt {conn.Target.Name}.TopicName" }
+                            }
+                        );
                         break;
                 }
             }
@@ -255,25 +294,15 @@ namespace Converter.SamWriting
         private YamlValue ParseSnsMessageAttributes(string s)
         {
             var result = new Dictionary<string, YamlValue>();
-            foreach (var p in s.Split('\n', System.StringSplitOptions.RemoveEmptyEntries))
+            foreach (var p in s.Split(new [] { '\n','\r',',' }, StringSplitOptions.RemoveEmptyEntries))
             {
-                var parts = p.Split('=', System.StringSplitOptions.RemoveEmptyEntries);
+                var parts = p.Split('=', StringSplitOptions.RemoveEmptyEntries);
                 if (parts.Length == 2)
                 {
-                    result.Add(parts[0].Trim(), new YamlValue(new[] { parts[1].Trim() }));
+                    result.Add(parts[0].Trim(), new YamlValue(new[] { parts[1].Replace("\"", "").Trim() }));
                 }
             }
             return result;
-        }
-
-        private string GetTemplate()
-        {
-            var assembly = GetType().Assembly;
-            var resourceName = "Converter.SamWriting.template.liquid";
-
-            using Stream stream = assembly.GetManifestResourceStream(resourceName);
-            using StreamReader reader = new StreamReader(stream);
-            return reader.ReadToEnd();
         }
     }
 }

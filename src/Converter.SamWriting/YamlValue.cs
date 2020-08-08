@@ -1,4 +1,5 @@
 ﻿using DotLiquid;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -30,49 +31,64 @@ namespace Converter.SamWriting
             }
         }
 
-        private string prefix;
+        public void Add(YamlValue item)
+        {
+            if (Type != "List")
+                throw new Exception($"Cannot add an item to YamlValue with type: {Type}");
+            listValue.Add(item);
+            Prefix = Prefix;
+        }
 
+        public void Add(string key, YamlValue value)
+        {
+            if (Type != "Map")
+                throw new Exception($"Cannot add a key-value pair to YamlValue with type: {Type}");
+            mapValue.Add(key, value);
+            Prefix = Prefix;
+        }
+
+        private string prefix;
+        private readonly List<YamlValue> listValue;
+        private readonly Dictionary<string, YamlValue> mapValue;
 
         public YamlValue(string stringValue)
         {
             Type = "String";
             StringValue = stringValue;
-            ListValue = null;
-            MapValue = null;
+            this.listValue = null;
+            this.mapValue = null;
         }
 
-        public List<YamlValue> ListValue { get; }
-
+        public IEnumerable<YamlValue> ListValue => listValue;
         public YamlValue(List<YamlValue> listValue)
         {
-            ListValue = listValue;
+            this.listValue = listValue;
             Type = "List";
             StringValue = null;
-            MapValue = null;
+            this.mapValue = null;
         }
 
         public YamlValue(IEnumerable<string> listValue)
         {
-            ListValue = listValue.Select(s => new YamlValue(s)).ToList();
+            this.listValue = listValue.Select(s => new YamlValue(s)).ToList();
             Type = "List";
             StringValue = null;
-            MapValue = null;
+            this.mapValue = null;
         }
 
-        public Dictionary<string, YamlValue> MapValue { get; }
-
+        public IReadOnlyDictionary<string, YamlValue> MapValue => mapValue;
         public YamlValue(Dictionary<string, YamlValue> mapValue)
         {
-            MapValue = mapValue;
-            ListValue = null;
+            this.mapValue = mapValue;
+            this.listValue = null;
             Type = "Map";
             StringValue = null;
         }
 
         public YamlValue(Dictionary<string, string> mapValue)
         {
-            MapValue = mapValue.ToDictionary(p => p.Key, p => new YamlValue(p.Value));
-            ListValue = null;
+            this.mapValue = mapValue.ToDictionary(p => p.Key, p => new YamlValue(p.Value));
+            this.listValue = null;
             Type = "Map";
             StringValue = null;
         }

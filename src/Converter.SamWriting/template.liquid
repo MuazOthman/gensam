@@ -1,26 +1,43 @@
 ﻿AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
-Description: SAM template genrated by gensam
+Description: >
+  SAM template genrated by gensam.
+  Included files:
+{% for f in model.IncludedFiles -%}
+  {{f}}
+{% endfor -%}
 
 Globals:
   Function:
-    Runtime: dotnetcore2.1
-    Timeout: 20
+    Runtime: {{model.FunctionGlobals.Runtime}}
+    Timeout: {{model.FunctionGlobals.Timeout}}
     MemorySize: 128
+{% if model.FunctionGlobals.EnvironmentVariables.size > 0 -%}
     Environment:
       Variables:
-        UNWRAP_AGGREGATE_EXCEPTIONS: true
-
-Parameters:
+{% for env in model.FunctionGlobals.EnvironmentVariables -%}
+        {{env.Key}}: {{env.Value}}
+{% endfor -%}
+{% endif -%}
 {% if model.IsCorsEnabled -%}
+
+  Api:
+    Cors:
+      AllowMethods: "'*'"
+      AllowHeaders: "'*'"
+      AllowOrigin: $Sub "'${AllowedDomains}'"
+{% endif -%}
+
+{% if model.IsCorsEnabled -%}
+Parameters:
   AllowedDomains:
     Type: String
     Default: '*'
     Description: The allowed domains to access the REST API over CORS
 
 {% endif -%}
-
 Resources:
+
 {% if model.Functions.size > 0 -%}
 ### Functions ###
 
@@ -28,8 +45,8 @@ Resources:
   {{f.Name}}:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: {{f.CodeUri}}
-      Handler: {{f.Handler}}
+      CodeUri: {% include 'FunctionCodeUri' with f %}
+      Handler: {% include 'FunctionHandler' with f %}
 {% if f.EnvironmentVariables.size > 0 -%}
       Environment:
         Variables:
@@ -51,7 +68,7 @@ Resources:
           Type: {{e.Type}}
 {% if e.Properties != null -%}
           Properties:
-{% include 'yaml' with e.Properties prefix: '            ' -%}
+{% include 'yaml' with e.Properties -%}
 {% endif -%}
 {% endfor -%}
 {% endif -%}
@@ -140,14 +157,15 @@ Resources:
             Action:
               - 'sqs:SendMessage'
             Resource:
-{% for q in policy.Value -%}
+{% assign queues = policy.Value | Uniq -%}
+{% for q in queues -%}
               - !GetAtt {{q}}.Arn
 {% endfor -%}
             Condition:
               ArnEquals:
                 aws:SourceArn: !Ref {{policy.Key}}
       Queues:
-{% for q in policy.Value -%}
+{% for q in queues -%}
         - !Ref {{q}}
 {% endfor -%}
 

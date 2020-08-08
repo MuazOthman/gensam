@@ -6,9 +6,9 @@
         {
             Source = source;
             Target = target;
+            Label = label ?? "";
             Source.AddOutboundConnection(this);
             Target.AddInboundConnection(this);
-            Label = label;
         }
 
         public Component Source { get; }
