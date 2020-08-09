@@ -1,6 +1,12 @@
 version: 1.0.{build}
 image: Visual Studio 2019
+environment:
+  sonar_key:
+    secure: 9IPGTeBarWlRZdfc1riOp4Vd9eHadSWNzOjUT+su9lrNd3Az6IpT8OvLngqo0t/X
 before_build:
-- cmd: nuget restore .\src
-build:
-  verbosity: minimal
+- ps: nuget restore .\src
+- ps: dotnet tool install --global dotnet-sonarscanner
+build_script:
+- ps: dotnet-sonarscanner begin /k:"MuazOthman_gensam" /d:"sonar.host.url=https://sonarcloud.io" /d:"sonar.login=$($env:sonar_key)" /o:"muazothman"
+- ps: dotnet build
+- ps: dotnet-sonarscanner end /d:"sonar.login==$($env:sonar_key)"
