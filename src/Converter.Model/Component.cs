@@ -83,12 +83,12 @@ namespace Converter.Model
         {
             // check for conflicts in type
             if (Type != another.Type)
-                throw new Exception(
+                throw new ModelException(
                     $"Failed merging component: name '{another.Name}' is shared by more than one resource of different types");
             // check for conflicts in properties
             foreach (var k in _properties.Keys)
                 if (another._properties.ContainsKey(k) && another._properties[k] != _properties[k])
-                    throw new Exception(
+                    throw new ModelException(
                         $"Failed merging conflicted property values '{_properties[k]}' and '{another._properties[k]}' for property '{k}'");
             // merge properties
             foreach (var k in another._properties.Keys)

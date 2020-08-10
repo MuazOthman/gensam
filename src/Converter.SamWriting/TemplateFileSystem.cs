@@ -66,7 +66,7 @@ namespace Converter.SamWriting
             using Stream stream = assembly.GetManifestResourceStream(fullPath);
             if (stream == null)
                 throw new FileSystemException("Error - No such template '{0}'", fullPath);
-            using StreamReader reader = new StreamReader(stream);
+            var reader = new StreamReader(stream);
             return reader.ReadToEnd();
         }
     }

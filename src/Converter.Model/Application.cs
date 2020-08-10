@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Converter.Model
 {
@@ -17,7 +16,7 @@ namespace Converter.Model
         public void RegisterComponent(string alias, Component component)
         {
             if (IsCompiled)
-                throw new Exception("Application is already compiled");
+                throw new ModelException("Application is already compiled");
             if (_components.ContainsKey(component.Name))
             {
                 var existingComponent = _components[component.Name];
@@ -44,14 +43,14 @@ namespace Converter.Model
         public void RegisterConnection(string sourceAlias, string targetAlias, string label = "")
         {
             if (IsCompiled)
-                throw new Exception("Application is already compiled");
+                throw new ModelException("Application is already compiled");
             _pendingConnections.Add(new PendingConnection(sourceAlias, targetAlias, label));
         }
 
         public void Compile()
         {
             if (IsCompiled)
-                throw new Exception("Application is already compiled");
+                throw new ModelException("Application is already compiled");
             foreach (var pendingConnection in _pendingConnections)
             {
                 var source = GetComponentByAlias(pendingConnection.SourceAlias);
@@ -65,20 +64,5 @@ namespace Converter.Model
 
             IsCompiled = true;
         }
-    }
-
-    internal class PendingConnection
-    {
-        public PendingConnection(string sourceAlias, string targetAlias, string label)
-        {
-            SourceAlias = sourceAlias;
-            TargetAlias = targetAlias;
-            Label = label;
-        }
-
-        public string SourceAlias { get; }
-
-        public string TargetAlias { get; }
-        public string Label { get; }
     }
 }

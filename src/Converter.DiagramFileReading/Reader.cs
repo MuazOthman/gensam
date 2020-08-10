@@ -116,7 +116,6 @@ namespace Converter.DiagramFileReading
             {
                 using (var gs = new DeflateStream(msi, CompressionMode.Decompress))
                 {
-                    //gs.CopyTo(mso);
                     CopyTo(gs, mso);
                 }
 

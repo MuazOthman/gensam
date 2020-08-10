@@ -1,5 +1,4 @@
 ﻿using DotLiquid;
-using System;
 using System.Collections.Generic;
 
 namespace Converter.SamWriting

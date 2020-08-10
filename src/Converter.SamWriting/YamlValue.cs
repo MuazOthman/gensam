@@ -1,5 +1,4 @@
 ﻿using DotLiquid;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,41 +14,48 @@ namespace Converter.SamWriting
             set
             {
                 prefix = value;
-                if (ListValue != null)
-                    foreach (var item in ListValue)
-                    {
-                        item.Prefix = Prefix + "  - ";
-                    }
-                if (MapValue != null)
-                    foreach (var item in MapValue)
-                    {
-                        if (item.Value.Type == "List")
-                            item.Value.Prefix = Prefix;
-                        else
-                            item.Value.Prefix = "  " + Prefix;
-                    }
+                ApplyPrefix();
             }
+        }
+
+        private void ApplyPrefix()
+        {
+            if (ListValue != null)
+                foreach (var item in ListValue)
+                {
+                    item.Prefix = Prefix + "  - ";
+                }
+            if (MapValue != null)
+                foreach (var item in MapValue)
+                {
+                    if (item.Value.Type == "List")
+                        item.Value.Prefix = Prefix;
+                    else
+                        item.Value.Prefix = "  " + Prefix;
+                }
         }
 
         public void Add(YamlValue item)
         {
             if (Type != "List")
-                throw new Exception($"Cannot add an item to YamlValue with type: {Type}");
+                throw new YamlValueException($"Cannot add an item to YamlValue with type: {Type}");
             listValue.Add(item);
-            Prefix = Prefix;
+            ApplyPrefix();
         }
 
         public void Add(string key, YamlValue value)
         {
             if (Type != "Map")
-                throw new Exception($"Cannot add a key-value pair to YamlValue with type: {Type}");
+                throw new YamlValueException($"Cannot add a key-value pair to YamlValue with type: {Type}");
             mapValue.Add(key, value);
-            Prefix = Prefix;
+            ApplyPrefix();
         }
 
         private string prefix;
         private readonly List<YamlValue> listValue;
         private readonly Dictionary<string, YamlValue> mapValue;
+        public IEnumerable<YamlValue> ListValue => listValue;
+        public IReadOnlyDictionary<string, YamlValue> MapValue => mapValue;
 
         public YamlValue(string stringValue)
         {
@@ -59,7 +65,6 @@ namespace Converter.SamWriting
             this.mapValue = null;
         }
 
-        public IEnumerable<YamlValue> ListValue => listValue;
         public YamlValue(List<YamlValue> listValue)
         {
             this.listValue = listValue;
@@ -76,7 +81,6 @@ namespace Converter.SamWriting
             this.mapValue = null;
         }
 
-        public IReadOnlyDictionary<string, YamlValue> MapValue => mapValue;
         public YamlValue(Dictionary<string, YamlValue> mapValue)
         {
             this.mapValue = mapValue;
