@@ -133,8 +133,7 @@ namespace Converter.SamWriting
                         // not supported
                         break;
                     case ComponentType.Bucket:
-                        if (!result.EnvironmentVariables.ContainsKey($"{conn.Target.Name}BucketName"))
-                            result.EnvironmentVariables.Add($"{conn.Target.Name}BucketName", $"!Ref {conn.Target.Name}");
+                        result.AddEnvironmentVariable($"{conn.Target.Name}BucketName", $"!Ref {conn.Target.Name}");
                         result.Policies.Add(
                             new Dictionary<string, string> {
                                 { "S3CrudPolicy", $"BucketName: !Ref {conn.Target.Name}" }
@@ -142,8 +141,7 @@ namespace Converter.SamWriting
                         );
                         break;
                     case ComponentType.EventBus:
-                        if (!result.EnvironmentVariables.ContainsKey($"{conn.Target.Name}BusName"))
-                            result.EnvironmentVariables.Add($"{conn.Target.Name}BusName", $"!Ref {conn.Target.Name}");
+                        result.AddEnvironmentVariable($"{conn.Target.Name}BusName", $"!Ref {conn.Target.Name}");
                         result.Policies.Add(
                             new Dictionary<string, string> {
                                 { "EventBridgePutEventsPolicy", $"EventBusName: !Ref {conn.Target.Name}" }
@@ -154,8 +152,7 @@ namespace Converter.SamWriting
                         // not supported
                         break;
                     case ComponentType.Queue:
-                        if (!result.EnvironmentVariables.ContainsKey($"{conn.Target.Name}QueueUrl"))
-                            result.EnvironmentVariables.Add($"{conn.Target.Name}QueueUrl", $"!Ref {conn.Target.Name}");
+                        result.AddEnvironmentVariable($"{conn.Target.Name}QueueUrl", $"!Ref {conn.Target.Name}");
                         result.Policies.Add(
                             new Dictionary<string, string> {
                                 { "SQSSendMessagePolicy", $"QueueName: !GetAtt {conn.Target.Name}.QueueName" }
@@ -169,8 +166,7 @@ namespace Converter.SamWriting
                         // not supported
                         break;
                     case ComponentType.Table:
-                        if (!result.EnvironmentVariables.ContainsKey($"{conn.Target.Name}TableName"))
-                            result.EnvironmentVariables.Add($"{conn.Target.Name}TableName", $"!Ref {conn.Target.Name}");
+                        result.AddEnvironmentVariable($"{conn.Target.Name}TableName", $"!Ref {conn.Target.Name}");
                         result.Policies.Add(
                             new Dictionary<string, string> {
                                 { "DynamoDBCrudPolicy", $"TableName: !Ref {conn.Target.Name}" }
@@ -178,8 +174,7 @@ namespace Converter.SamWriting
                         );
                         break;
                     case ComponentType.Topic:
-                        if (!result.EnvironmentVariables.ContainsKey($"{conn.Target.Name}TopicArn"))
-                            result.EnvironmentVariables.Add($"{conn.Target.Name}TopicArn", $"!Ref {conn.Target.Name}");
+                        result.AddEnvironmentVariable($"{conn.Target.Name}TopicArn", $"!Ref {conn.Target.Name}");
                         result.Policies.Add(
                             new Dictionary<string, string> {
                                 { "SNSPublishMessagePolicy", $"TopicName: !GetAtt {conn.Target.Name}.TopicName" }
@@ -251,7 +246,7 @@ namespace Converter.SamWriting
                         });
                         if (conn.Source.InboundConnections.Any(conn2 => conn2.Source.Type == ComponentType.Browser))
                         {
-                            result.EnvironmentVariables.Add("AllowedDomains", "!Ref AllowedDomains");
+                            result.AddEnvironmentVariable("AllowedDomains", "!Ref AllowedDomains");
                         }
                         break;
                     case ComponentType.Schedule:

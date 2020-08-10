@@ -1,5 +1,5 @@
 version: 1.0.{build}
-image: Visual Studio 2019
+image: Ubuntu2004
 environment:
   sonar_key:
     secure: 9IPGTeBarWlRZdfc1riOp4Vd9eHadSWNzOjUT+su9lrNd3Az6IpT8OvLngqo0t/X
