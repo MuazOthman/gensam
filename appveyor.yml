@@ -3,12 +3,16 @@ image: Ubuntu2004
 environment:
   sonar_key:
     secure: 9IPGTeBarWlRZdfc1riOp4Vd9eHadSWNzOjUT+su9lrNd3Az6IpT8OvLngqo0t/X
+install:
+- ps: dotnet tool install --global dotnet-sonarscanner
 before_build:
 - ps: cd "$($env:APPVEYOR_BUILD_FOLDER)/src"
 - ps: nuget restore
-- ps: dotnet tool install --global dotnet-sonarscanner
+- ps: dotnet-sonarscanner begin /k:"MuazOthman_gensam" /d:"sonar.host.url=https://sonarcloud.io" /d:"sonar.login=$($env:sonar_key)" /o:"muazothman" /v:"0.1.0.0" /d:sonar.cs.vscoveragexml.reportsPaths:"$($env:APPVEYOR_BUILD_FOLDER)/src/**/*.opencover.xml"
 build_script:
 - ps: cd "$($env:APPVEYOR_BUILD_FOLDER)/src"
-- ps: dotnet-sonarscanner begin /k:"MuazOthman_gensam" /d:"sonar.host.url=https://sonarcloud.io" /d:"sonar.login=$($env:sonar_key)" /o:"muazothman" /v:"0.1.0.0"
 - ps: dotnet build
+test_script:
+- ps: dotnet test --collect "XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+after_test:
 - ps: dotnet-sonarscanner end /d:"sonar.login=$($env:sonar_key)"

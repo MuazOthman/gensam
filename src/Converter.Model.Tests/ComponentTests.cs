@@ -54,7 +54,7 @@ namespace Converter.Model.Tests
             // Act
 
             // Assert
-            Assert.ThrowsAny<Exception>(Action);
+            Assert.Throws<ArgumentException>(Action);
         }
 
         [Fact]
