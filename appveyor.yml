@@ -8,7 +8,7 @@ install:
 before_build:
 - ps: cd "$($env:APPVEYOR_BUILD_FOLDER)/src"
 - ps: nuget restore
-- ps: dotnet-sonarscanner begin /k:"MuazOthman_gensam" /d:"sonar.host.url=https://sonarcloud.io" /d:"sonar.login=$($env:sonar_key)" /o:"muazothman" /v:"0.1.0.0" /d:sonar.cs.vscoveragexml.reportsPaths:"$($env:APPVEYOR_BUILD_FOLDER)/src/**/*.opencover.xml"
+- ps: dotnet-sonarscanner begin /k:"MuazOthman_gensam" /d:"sonar.host.url=https://sonarcloud.io" /d:"sonar.login=$($env:sonar_key)" /o:"muazothman" /v:"0.1.0.0" /d:sonar.cs.vscoveragexml.reportsPaths:"$($env:APPVEYOR_BUILD_FOLDER)/src/*/*.opencover.xml"
 build_script:
 - ps: cd "$($env:APPVEYOR_BUILD_FOLDER)/src"
 - ps: dotnet build
