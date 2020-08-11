@@ -15,7 +15,7 @@ namespace Converter.ConsoleApp
     {
         class Options
         {
-            [Option("input", Default = ".", HelpText = "Input files/folders to be processed.")]
+            [Option("input", Default = new[] { "." }, HelpText = "Input files/folders to be processed.")]
             public IEnumerable<string> InputPaths { get; set; }
 
             [Option("output", Default = "template.yaml", Required = false, HelpText = "Output file for SAM template.")]

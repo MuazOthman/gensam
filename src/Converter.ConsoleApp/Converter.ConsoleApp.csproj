@@ -18,9 +18,9 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <AssemblyTitle>gensam</AssemblyTitle>
     <Copyright>Copyright (c) 2020 Muaz Othman</Copyright>
-    <AssemblyVersion>0.2.0</AssemblyVersion>
+    <AssemblyVersion>0.2.1</AssemblyVersion>
     <RepositoryUrl>https://github.com/MuazOthman/gensam</RepositoryUrl>
-    <Version>0.2.0</Version>
+    <Version>0.2.1</Version>
     <PackageOutputPath>./nupkg</PackageOutputPath>
   </PropertyGroup>
 
