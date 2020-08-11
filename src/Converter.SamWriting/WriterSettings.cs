@@ -18,6 +18,7 @@ namespace Converter.SamWriting
     {
         public string Runtime { get; set; }
         public string Timeout { get; set; }
+        public string MemorySize { get; set; }
         public Dictionary<string, string> EnvironmentVariables { get; set; }
     }
 }

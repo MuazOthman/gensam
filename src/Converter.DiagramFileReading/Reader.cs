@@ -89,6 +89,8 @@ namespace Converter.DiagramFileReading
                 return new Component(name, ComponentType.Queue);
             if (element.Attribute("style").Value.Contains("shape=mxgraph.aws4.bucket"))
                 return new Component(name, ComponentType.Bucket);
+            if (element.Attribute("style").Value.Contains("shape=mxgraph.aws4.event_time_based"))
+                return new Component(name, ComponentType.Schedule);
             return null;
         }
 

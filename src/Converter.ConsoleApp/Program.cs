@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 
 namespace Converter.ConsoleApp
 {
@@ -32,7 +33,10 @@ namespace Converter.ConsoleApp
                 get
                 {
                     return new List<Example>() {
-                        new Example("Generate a SAM template for the combination of all draw.io diagrams on a folder", new Options { InputPaths = new []{"C:\\diagrams" } })
+                        new Example("Generate a SAM template for the combination of all draw.io diagrams in current folder", new Options() ),
+                        new Example("Generate a SAM template for the combination of all draw.io diagrams in a specified folder", new Options { InputPaths = new []{"C:\\diagrams" } }),
+                        new Example("Generate a SAM template for the combination of specific draw.io diagrams", new Options { InputPaths = new []{"1.drawio","2.drawio" } }),
+                        new Example("Generate a SAM template a draw.io diagrams and timestamp output file", new Options { OutputPath = "template-{0:yyyy-MM-dd_hh_mm_ss}.yaml" }),
                       };
                 }
             }
@@ -52,7 +56,7 @@ namespace Converter.ConsoleApp
             Console.WriteLine();
 
             var writerSettings = string.IsNullOrEmpty(options.WriterSettingsPath)
-                ? (WriterSettings)null
+                ? JsonConvert.DeserializeObject<WriterSettings>(DefaultWriterSettings())
                 : JsonConvert.DeserializeObject<WriterSettings>(File.ReadAllText(options.WriterSettingsPath));
 
             var app = new Application();
@@ -97,8 +101,9 @@ namespace Converter.ConsoleApp
                 WriterSettings = writerSettings,
                 IncludedFiles = files
             };
-            Console.WriteLine($"Writing file: {options.OutputPath}");
-            writer.Write(options.OutputPath);
+            var outputPath = string.Format(options.OutputPath, DateTime.Now);
+            Console.WriteLine($"Writing file: {outputPath}");
+            writer.Write(outputPath);
         }
 
         private static void HandleParseError(IEnumerable<Error> errs, TextWriter writer)
@@ -107,6 +112,12 @@ namespace Converter.ConsoleApp
                 Console.WriteLine(writer.ToString());
             else
                 Console.Error.WriteLine(writer.ToString());
+        }
+        private static string DefaultWriterSettings()
+        {
+            using Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Converter.ConsoleApp.default-writer-settings.json");
+            var reader = new StreamReader(stream);
+            return reader.ReadToEnd();
         }
     }
 }

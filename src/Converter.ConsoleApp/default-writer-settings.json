@@ -1,0 +1,14 @@
+{
+  "Function": {
+    "CodeUriTemplate": "./Lamb{{f.Name}}/",
+    "HandlerTemplate": "Lamb{{f.Name}}::Lamb{{f.Name}}.{{f.Name}}::Invoke",
+    "Globals": {
+      "Runtime": "dotnetcore2.1",
+      "Timeout": "20",
+      "MemorySize": "128",
+      "EnvironmentVariables": {
+        "UNWRAP_AGGREGATE_EXCEPTIONS": "true"
+      }
+    }
+  }
+}

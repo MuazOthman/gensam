@@ -1,0 +1,10 @@
+﻿  {{sub.Queue}}{{sub.Topic}}:
+    Type: AWS::SNS::Subscription
+    Properties:
+      TopicArn: !Ref {{sub.Topic}}
+      Endpoint: !GetAtt {{sub.Queue}}.Arn
+      Protocol: sqs
+{% if sub.FilterPolicy.size>0 -%}
+      FilterPolicy:
+{% include 'yaml' with sub.FilterPolicy -%}
+{% endif -%}

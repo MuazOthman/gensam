@@ -1,0 +1,88 @@
+﻿AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  SAM template genrated by gensam.
+  Included files:
+{% for f in model.IncludedFiles -%}
+  {{f}}
+{% endfor -%}
+
+Globals:
+  Function:
+    Runtime: {{model.FunctionGlobals.Runtime}}
+    Timeout: {{model.FunctionGlobals.Timeout}}
+    MemorySize: {{model.FunctionGlobals.MemorySize}}
+{% if model.FunctionGlobals.EnvironmentVariables.size > 0 -%}
+    Environment:
+      Variables:
+{% for env in model.FunctionGlobals.EnvironmentVariables -%}
+        {{env.Key}}: {{env.Value}}
+{% endfor -%}
+{% endif -%}
+{% if model.IsCorsEnabled -%}
+
+  Api:
+    Cors:
+      AllowMethods: "'*'"
+      AllowHeaders: "'*'"
+      AllowOrigin: !Sub "'${AllowedDomains}'"
+{% endif -%}
+
+{% if model.IsCorsEnabled or model.Parameters.size > 0 -%}
+Parameters:
+{% if model.IsCorsEnabled -%}
+  AllowedDomains:
+    Type: String
+    Default: '*'
+    Description: The allowed domains to access the REST API over CORS
+{% endif -%}
+{% for p in model.Parameters -%}
+  {{p.Key}}:
+    Type: String
+    Default: '{{p.Value}}'
+{% endfor -%}
+{% endif -%}
+
+Resources:
+
+### Functions ###
+{% for f in model.Functions -%}
+{% include 'function' with f -%}
+{% endfor -%}
+
+### Tables ###
+{% for t in model.Tables -%}
+{% include 'table' with t -%}
+{% endfor -%}
+
+### S3 Buckets ###
+{% for b in model.Buckets -%}
+{% include 'bucket' with b -%}
+{% endfor -%}
+
+### SNS Topics ###
+{% for t in model.Topics -%}
+{% include 'topic' with t -%}
+{% endfor -%}
+
+### SQS Queues ###
+{% for q in model.Queues -%}
+{% include 'queue' with q -%}
+{% endfor -%}
+
+### SQS Queue Policies per SNS Topic ###
+{% for policy in model.QueuePoliciesPerTopic -%}
+{% include 'queue_policies_for_topic' with policy -%}
+{% endfor -%}
+
+### SQS Queue Subscription to SNS ###
+{% for sub in model.QueueTopicSubscriptions -%}
+{% include 'queue_topic_subscription' with sub -%}
+{% endfor -%}
+
+{% if model.HasRestApi -%}
+Outputs:
+  ApiEndpoint:
+    Description: 'API endpoint'
+    Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/'
+{% endif -%}

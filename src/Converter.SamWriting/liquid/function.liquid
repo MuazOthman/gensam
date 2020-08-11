@@ -1,0 +1,30 @@
+﻿  {{f.Name}}:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: {% include 'FunctionCodeUri' with f %}
+      Handler: {% include 'FunctionHandler' with f %}
+{% if f.EnvironmentVariables.size > 0 -%}
+      Environment:
+        Variables:
+{% for env in f.EnvironmentVariables -%}
+          {{env.Key}}: {{env.Value}}
+{% endfor -%}
+{% endif -%}
+{% if f.Policies.size > 0 -%}
+      Policies:
+{% for p in f.Policies -%}
+        - {{p.Key}}:
+            {{p.Value}}
+{% endfor -%}
+{% endif -%}
+{% if f.Events.size > 0 -%}
+      Events:
+{% for e in f.Events -%}
+        {{e.Key}}:
+          Type: {{e.Value.Type}}
+{% if e.Value.Properties != null -%}
+          Properties:
+{% include 'yaml' with e.Value.Properties -%}
+{% endif -%}
+{% endfor -%}
+{% endif -%}

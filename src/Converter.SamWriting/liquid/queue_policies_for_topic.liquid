@@ -1,0 +1,22 @@
+﻿  QueuePolicyFor{{policy.TopicName}}:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: '*'
+            Action:
+              - 'sqs:SendMessage'
+            Resource:
+{% assign queues = policy.QueueNames | Uniq -%}
+{% for q in queues -%}
+              - !GetAtt {{q}}.Arn
+{% endfor -%}
+            Condition:
+              ArnEquals:
+                aws:SourceArn: !Ref {{policy.TopicName}}
+      Queues:
+{% for q in queues -%}
+        - !Ref {{q}}
+{% endfor -%}

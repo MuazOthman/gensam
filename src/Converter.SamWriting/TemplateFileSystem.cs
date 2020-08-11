@@ -39,7 +39,7 @@ namespace Converter.SamWriting
                 ? Path.Combine(root, Path.GetDirectoryName(templatePath))
                 : root;
 
-            var fileName = string.Format("{0}.liquid", Path.GetFileName(templatePath));
+            var fileName = string.Format("liquid/{0}.liquid", Path.GetFileName(templatePath));
 
             var fullPath = Regex.Replace(Path.Combine(basePath, fileName), @"\\|/", ".");
 

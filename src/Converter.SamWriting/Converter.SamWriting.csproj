@@ -5,13 +5,27 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="liquid\bucket.liquid" />
+    <None Remove="liquid\function.liquid" />
+    <None Remove="liquid\queue.liquid" />
+    <None Remove="liquid\queue_policies_for_topic.liquid" />
+    <None Remove="liquid\queue_topic_subscription.liquid" />
+    <None Remove="liquid\table.liquid" />
+    <None Remove="liquid\topic.liquid" />
     <None Remove="template.liquid" />
     <None Remove="yaml.liquid" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="yaml.liquid" />
-    <EmbeddedResource Include="template.liquid" />
+    <EmbeddedResource Include="liquid\function.liquid" />
+    <EmbeddedResource Include="liquid\table.liquid" />
+    <EmbeddedResource Include="liquid\bucket.liquid" />
+    <EmbeddedResource Include="liquid\queue.liquid" />
+    <EmbeddedResource Include="liquid\queue_policies_for_topic.liquid" />
+    <EmbeddedResource Include="liquid\queue_topic_subscription.liquid" />
+    <EmbeddedResource Include="liquid\topic.liquid" />
+    <EmbeddedResource Include="liquid\yaml.liquid" />
+    <EmbeddedResource Include="liquid\application.liquid" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,0 +1,13 @@
+﻿  {{b.Name}}:
+    Type: AWS::S3::Bucket
+{% if b.IsCorsEnabled -%}
+    Properties:
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders:
+              - "*"
+            AllowedMethods:
+              - PUT
+            AllowedOrigins:
+              - !Sub "${AllowedDomains}"
+{% endif -%}
