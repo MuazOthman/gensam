@@ -4,7 +4,7 @@
       TopicArn: !Ref {{sub.Topic}}
       Endpoint: !GetAtt {{sub.Queue}}.Arn
       Protocol: sqs
-{% if sub.FilterPolicy.size>0 -%}
+{% unless sub.FilterPolicy.IsEmpty -%}
       FilterPolicy:
 {% include 'yaml' with sub.FilterPolicy -%}
-{% endif -%}
+{% endunless -%}

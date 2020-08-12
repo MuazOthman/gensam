@@ -35,6 +35,20 @@ namespace Converter.SamWriting
                 }
         }
 
+        public bool IsEmpty
+        {
+            get
+            {
+                switch (Type)
+                {
+                    case "String": return string.IsNullOrEmpty(StringValue);
+                    case "Map": return !MapValue.Any();
+                    case "List": return !ListValue.Any();
+                }
+                return true;
+            }
+        }
+
         public void Add(YamlValue item)
         {
             if (Type != "List")

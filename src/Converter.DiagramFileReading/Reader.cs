@@ -46,19 +46,22 @@ namespace Converter.DiagramFileReading
             }
             foreach (XElement edge in edges)
             {
-                var labelElement =
-                (from el in root.Elements("mxCell")
-                 where
-                    (string)el.Attribute("vertex") == "1"
-                    && (string)el.Attribute("parent") == (string)edge.Attribute("id")
-                    && ((string)el.Attribute("style")).Contains("edgeLabel")
-                 select el).SingleOrDefault();
-                var label = "";
-                if (labelElement != null)
+                var label = edge.Attribute("value")?.Value;
+                if (string.IsNullOrEmpty(label))
                 {
-                    var html = new HtmlDocument();
-                    html.LoadHtml(labelElement.Attribute("value").Value);
-                    label = WebUtility.HtmlDecode(html.DocumentNode.InnerText) ?? "";
+                    var labelElement =
+                    (from el in root.Elements("mxCell")
+                     where
+                        (string)el.Attribute("vertex") == "1"
+                        && (string)el.Attribute("parent") == (string)edge.Attribute("id")
+                        && ((string)el.Attribute("style")).Contains("edgeLabel")
+                     select el).SingleOrDefault();
+                    if (labelElement != null)
+                    {
+                        var html = new HtmlDocument();
+                        html.LoadHtml(labelElement.Attribute("value").Value);
+                        label = WebUtility.HtmlDecode(html.DocumentNode.InnerText) ?? "";
+                    }
                 }
                 application.RegisterConnection(
                     fileId + edge.Attribute("source")?.Value,
